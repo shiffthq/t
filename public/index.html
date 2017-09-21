@@ -1,0 +1,78 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>URL Shortener</title>
+
+    <script src="https://cdn.bootcss.com/vue/2.4.2/vue.min.js"></script>
+    <script src="https://cdn.bootcss.com/vue-resource/1.3.4/vue-resource.min.js"></script>
+    <script src="https://cdn.bootcss.com/clipboard.js/1.7.1/clipboard.min.js"></script>
+    <link href="https://cdn.bootcss.com/bulma/0.5.1/css/bulma.min.css" rel="stylesheet">
+  </head>
+
+  <body class="hero is-fullheight">
+
+    <div class="hero-body">
+      <div id="app" class=" has-text-centered">
+          <h1 class="title is-1">URL Shortener</h1>
+
+          <input autofocus class="input" type="text" placeholder="URL" v-model="url" @keyup.enter="submit">
+
+          <div class="subtitle is-5" v-show="short_url">
+            <div class="tag is-success">Success</div>
+            <a target="_blank" v-bind:href="short_url">{{ short_url }}</a>
+          </div>
+
+          <div class="subtitle is-5" v-show="error_message">
+            <div class="tag is-danger">Failure</div>
+            {{ error_message }}
+          </div>
+      </div>
+    </div>
+
+    <footer class="footer">
+      <div class="container">
+        <div class="content has-text-centered">
+          <p>
+            by <a href="http://github.com/isayme">iSayme</a>. The source code is licensed
+            <a href="https://github.com/shiffthq/t/blob/master/LICENSE">MIT</a>.
+          </p>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      new Vue({
+        el: '#app',
+        data: {
+          url: '',
+          short_url: '',
+          error_message: ''
+        },
+        methods: {
+          submit: function () {
+            let url = this.url
+            if (!/^(f|ht)tps?:\/\//i.test(url)) {
+              url = "http://" + url;
+           }
+
+            this.$http.post('/shorten', {
+              url: url
+            }).then(response => {
+              this.short_url = [
+                window.location.origin,
+                response.body.code
+              ].join('/')
+            }, response => {
+              this.error_message = response.body.message
+            })
+          }
+        }
+      })
+    </script>
+
+  </body>
+</html>
