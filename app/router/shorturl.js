@@ -17,9 +17,11 @@ router.post('/shorten', function (req, res, next) {
   Shorturl.create({
     code: shortid.generate(),
     url: url
-  }).then(doc => {
-    res.json(doc)
-  }).catch(next)
+  })
+    .then(doc => {
+      res.json(doc)
+    })
+    .catch(next)
 })
 
 router.get('/:code([0-9a-zA-Z]+)', function (req, res, next) {
@@ -29,15 +31,17 @@ router.get('/:code([0-9a-zA-Z]+)', function (req, res, next) {
     where: {
       code: code
     }
-  }).then(doc => {
-    if (doc) {
-      res.json(doc)
-    } else {
-      res.status(404).json({
-        message: 'not found'
-      })
-    }
-  }).catch(next)
+  })
+    .then(doc => {
+      if (doc) {
+        res.json(doc)
+      } else {
+        res.status(404).json({
+          message: 'not found'
+        })
+      }
+    })
+    .catch(next)
 })
 
 module.exports = router

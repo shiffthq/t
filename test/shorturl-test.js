@@ -6,23 +6,20 @@ describe('shorturl', () => {
   describe('shorten', () => {
     it('should ok', function * () {
       let url = 'http://example.com'
-      let res = yield request(app).post('/shorten')
+      let res = yield request(app)
+        .post('/shorten')
         .send({
           url
         })
       assert.equal(res.statusCode, 200)
       assert.equal(res.body.url, url)
 
-      assert.deepEqual(Object.keys(res.body), [
-        'id',
-        'code',
-        'url',
-        'created'
-      ])
+      assert.deepEqual(Object.keys(res.body), ['id', 'code', 'url', 'created'])
     })
 
     it('should reject', function * () {
-      let res = yield request(app).post('/shorten')
+      let res = yield request(app)
+        .post('/shorten')
         .send({
           url: ['something not string']
         })
@@ -34,7 +31,8 @@ describe('shorturl', () => {
   describe('retrieve', () => {
     it('should ok', function * () {
       let url = 'http://example.com'
-      let res = yield request(app).post('/shorten')
+      let res = yield request(app)
+        .post('/shorten')
         .send({
           url
         })
