@@ -26,6 +26,7 @@ router.post('/shorten', function (req, res, next) {
 
 router.get('/:code([0-9a-zA-Z_-]+)', function (req, res, next) {
   const code = req.params.code
+  const inspect = req.query.inspect
 
   Shorturl.findOne({
     where: {
@@ -34,7 +35,11 @@ router.get('/:code([0-9a-zA-Z_-]+)', function (req, res, next) {
   })
     .then(doc => {
       if (doc) {
-        res.json(doc)
+        if (inspect !== undefined) {
+          res.json(doc)
+        } else {
+          res.redirect(doc.url)
+        }
       } else {
         res.status(404).json({
           message: 'not found'

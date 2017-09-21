@@ -39,9 +39,15 @@ describe('shorturl', () => {
       assert.equal(res.statusCode, 200)
 
       let code = res.body.code
-      res = yield request(app).get(`/${code}`)
+      res = yield request(app).get(`/${code}?inspect`)
       assert.equal(res.statusCode, 200)
       assert.equal(res.body.url, url)
+
+      res = yield request(app)
+        .get(`/${code}`)
+        .redirects(0)
+      assert.equal(res.statusCode, 302)
+      assert.equal(res.headers.location, url)
     })
 
     it('should return 404 if not found', function * () {
