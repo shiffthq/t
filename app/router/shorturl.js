@@ -24,7 +24,7 @@ router.post('/shorten', function (req, res, next) {
     .catch(next)
 })
 
-router.get('/:code([0-9a-zA-Z]+)', function (req, res, next) {
+router.get('/:code([0-9a-zA-Z_-]+)', function (req, res, next) {
   const code = req.params.code
 
   Shorturl.findOne({
