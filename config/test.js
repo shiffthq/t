@@ -1,6 +1,6 @@
 module.exports = {
-  port: 8080,
+  port: 0,
   sqlite: {
-    storage: 't.db'
+    storage: 't.test.db'
   }
 }
