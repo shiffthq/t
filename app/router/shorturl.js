@@ -1,8 +1,11 @@
 const express = require('express')
 const router = express.Router()
-const shortid = require('shortid')
+const generate = require('nanoid/generate')
 
 const Shorturl = require('../model/shorturl')
+
+const generateId = () =>
+  generate('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890', 6)
 
 router.post('/shorten', function (req, res, next) {
   const url = req.body.url
@@ -15,7 +18,7 @@ router.post('/shorten', function (req, res, next) {
   }
 
   Shorturl.create({
-    code: shortid.generate(),
+    code: generateId(),
     url: url
   })
     .then(doc => {
